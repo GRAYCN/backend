@@ -118,7 +118,7 @@ PEGraph* CFGCompute::transfer_copy(PEGraph* in, Stmt* stmt,Grammar *grammar){
 
 	// the KILL set
 	std::set<vertexid_t> vertices;
-	strong_update(stmt->getSrc(),out,vertices,grammar);
+	strong_update(stmt->getDst(),out,vertices,grammar);
 	
 	// the GEN set
 	peg_compute(out,stmt,grammar);
@@ -131,7 +131,7 @@ PEGraph* CFGCompute::transfer_load(PEGraph* in, Stmt* stmt,Grammar *grammar){
 	
 	// the KILL set
 	std::set<vertexid_t> vertices;
-	strong_update(stmt->getSrc(),out,vertices,grammar);
+	strong_update(stmt->getDst(),out,vertices,grammar);
 	
 	// the GEN set
 	peg_compute(out,stmt,grammar);
@@ -144,8 +144,8 @@ PEGraph* CFGCompute::transfer_store(PEGraph* in, Stmt* stmt,Grammar *grammar){
 	// the KILL set
 	std::set<vertexid_t> vertices;
 	 
-	if(is_strong_update(stmt->getSrc(),out,grammar)) {
-		strong_update(stmt->getSrc(),out,vertices,grammar);
+	if(is_strong_update(stmt->getDst(),out,grammar)) {
+		strong_update(stmt->getDst(),out,vertices,grammar);
 	}
 	// the GEN set
 	peg_compute(out,stmt,grammar);
@@ -158,7 +158,7 @@ PEGraph* CFGCompute::transfer_address(PEGraph* in, Stmt* stmt,Grammar *grammar){
 	
 	// the KILL set
 	std::set<vertexid_t> vertices;
-	strong_update(stmt->getSrc(),out,vertices,grammar);
+	strong_update(stmt->getDst(),out,vertices,grammar);
 	
 	// the GEN set
 	peg_compute(out,stmt,grammar);

@@ -18,7 +18,7 @@ void ComputationSet::init(PEGraph *out,Stmt *stmt) {
 	for(int i = 0;i < numVertices;++i) {
 		Olds[i] = EdgeArray();
 		News[i] = EdgeArray();
-		if(i == (stmt->getSrc() - firstVid)) {
+		if(i == (stmt->getDst()  - firstVid)) {
 			int len = 0; int n1 = out->getNumEdges(i); int n2 = 1;
 			vertexid_t *stmt_edge = new vertexid_t[n2];
 			label_t *stmt_label = new label_t[n2];
