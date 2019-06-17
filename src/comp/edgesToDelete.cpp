@@ -1,14 +1,14 @@
 #include "edgesToDelete.h"
 
 EdgesToDelete::EdgesToDelete() {
-	edges = NULL; labels = NULL;
+	edges = nullptr; labels = nullptr;
 	size = capacity = realNumEdges = 0;
 }
 
 void EdgesToDelete::clear() {
 	if(size) {
-		if(edges) {delete[] edges; edges = NULL;}
-		if(labels) {delete[] labels; labels = NULL;}
+		if(edges) {delete[] edges; edges = nullptr;}
+		if(labels) {delete[] labels; labels = nullptr;}
 		size = capacity = realNumEdges = 0;
 	}	
 }

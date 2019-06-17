@@ -5,6 +5,7 @@
 #include "pegraph.h"
 #include "stmt.h"
 #include "myalgorithm.h"
+#include "edgesToDelete.h"
 
 class ComputationSet {
 	private:		
@@ -19,6 +20,8 @@ class ComputationSet {
 		void clear();
 
 		void init(PEGraph *out,Stmt *stmt);
+
+		void init(PEGraph *out, std::map<int, EdgesToDelete*>& m);
 
 		// getters and setters
 		inline vertexid_t getFirstVid() {return firstVid;}

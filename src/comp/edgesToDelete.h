@@ -18,12 +18,19 @@ class EdgesToDelete {
 		~EdgesToDelete(){}
 		void clear();
 
-		// getters and setters
-		inline int getRealNumEdges() {return realNumEdges;}
-		inline vertexid_t *getEdges() {return edges;}
-		inline label_t *getLabels() {return labels;}
+    vertexid_t *getEdges() const {
+        return edges;
+    }
 
-		void addOneEdge(vertexid_t edge,label_t label);
+    label_t *getLabels() const {
+        return labels;
+    }
+
+    int getRealNumEdges() const {
+        return realNumEdges;
+    }
+
+    void addOneEdge(vertexid_t edge,label_t label);
 		void merge();
 
 };
