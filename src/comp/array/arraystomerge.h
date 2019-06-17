@@ -33,13 +33,13 @@ public:
 	void mergeKArrays();
 
 	// virtual function
-	virtual void addOneContainer();
-	virtual void addOneEdge(vertexid_t edge,char label);
-	virtual int getNumEdges() {return numEdges;}
-	virtual void merge();
-	virtual vertexid_t* getEdgesFirstAddr() {return resEdges;}
-	virtual char* getLabelsFirstAddr() {return resLabels;}
-	virtual void clear();
+	void addOneContainer() override;
+	void addOneEdge(vertexid_t edge,char label) override;
+	int getNumEdges() override {return numEdges;}
+	void merge() override;
+	vertexid_t* getEdgesFirstAddr() override {return resEdges;}
+	char* getLabelsFirstAddr() override {return resLabels;}
+	void clear() override;
 };
 }
 #endif
