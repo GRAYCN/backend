@@ -54,7 +54,7 @@ void PEGCompute::getEdgesToMerge(vertexid_t index,ComputationSet &compset,bool o
 }
 
 void PEGCompute::genS_RuleEdges(vertexid_t index,ComputationSet &compset,ContainersToMerge &containers,Grammar *grammar) {
-	vertexid_t numEdges = compset.getDeltasNumEdges(index);
+	vertexid_t numEdges = compset.getDeltasNumEdges(index);                 //## can we make sure that the deltas is uniqueness
 	vertexid_t *edges = compset.getDeltasEdges(index);
 	char *labels = compset.getDeltasLabels(index);
 
@@ -63,7 +63,7 @@ void PEGCompute::genS_RuleEdges(vertexid_t index,ComputationSet &compset,Contain
 	for(vertexid_t i = 0;i < numEdges;++i) {
 		newLabel = grammar->checkRules(labels[i]);
 		if(newLabel != (char)127) {
-			if(!added) { 
+			if(!added) {                            // ##这是个啥意思
 				containers.addOneContainer();
 				added = true;
 			}
