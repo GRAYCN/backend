@@ -9,6 +9,7 @@
 #define COMP_PEGRAPH_H_
 #include "../common/CommonLibs.hpp"
 #include "edgearray.h"
+#include "EdgeArrayMap.h"
 class PEGraph{
 
 public:
@@ -20,15 +21,18 @@ public:
 	
 	// getters and setters
 	inline vertexid_t getFirstVid() {return firstVid;}
-	inline EdgeArray* getGraph() {return graph;}
-	inline bool* getSingletonArray() {return isSingletonArray;}
+//	inline EdgeArray* getGraph() {return graph;}
+    EdgeArrayMap *getGraph() const {return graph;}
+
+    inline bool* getSingletonArray() {return isSingletonArray;}
 	inline vertexid_t getNumVertices() {return numVertices;}
-	inline bool isSingleton(vertexid_t vid) {return isSingletonArray[vid - firstVid];}	
+	inline bool isSingleton(vertexid_t vid) {return isSingletonArray[vid - firstVid];}
 
+    void setGraphMap(EdgeArrayMap *graphMap);
 
-	inline vertexid_t* getEdges(vertexid_t index) {return graph[index].getEdges();}
-	inline label_t* getLabels(vertexid_t index) {return graph[index].getLabels();}
-	inline vertexid_t getNumEdges(vertexid_t index) {return graph[index].getSize();}
+    inline vertexid_t* getEdges(vertexid_t index) {return graph->getEdgeArrayMap().at(index)->getEdges();}
+	inline label_t* getLabels(vertexid_t index) {return graph->getEdgeArrayMap().at(index)->getLabels();}
+	inline vertexid_t getNumEdges(vertexid_t index) {return graph->getEdgeArrayMap().at(index)->getSize();}
 	
 	void setEdgeArray(vertexid_t index,int numEdges,vertexid_t *edges,label_t *labels);
 	void clearEdgeArray(vertexid_t index);
@@ -42,9 +46,19 @@ public:
 //		return NULL;
 	}
 
+    void setFirstVid(vertexid_t _firstVid);
+
+    void setGraph(EdgeArrayMap *_graph);
+
+    bool *getIsSingletonArray() const;
+
+    void setIsSingletonArray(bool *_isSingletonArray);
+
+    void setNumVertices(vertexid_t numVertices);
+
 private:
 	vertexid_t firstVid;
-	EdgeArray *graph;
+	EdgeArrayMap *graph;
 	bool *isSingletonArray;
 	vertexid_t numVertices;
 };

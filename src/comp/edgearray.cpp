@@ -54,11 +54,11 @@ void EdgeArray::clear() {
 	if(size) {
 		if(edges) {
 			delete[] edges;
-			edges = NULL;
+			edges = nullptr;
 		}
 		if(labels) {
 			delete[] labels;
-			labels = NULL;
+			labels = nullptr;
 		}
 		size = 0;
 	}	

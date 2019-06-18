@@ -8,7 +8,7 @@
 
 class ComputationSet {
 	private:		
-		EdgeArray *Olds;	// Ov
+		EdgeArray  *Olds;	// Ov
 		EdgeArray *Deltas;	// Dv
 		EdgeArray *News;
 		vertexid_t firstVid;
