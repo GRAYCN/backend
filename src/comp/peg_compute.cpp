@@ -1,8 +1,6 @@
 #include "peg_compute.h"
 
-PEGCompute::PEGCompute() {
-		
-}
+PEGCompute::PEGCompute() = default;
 
 long PEGCompute::startCompute(ComputationSet &compset, Grammar *grammar, std::map<int, EdgesToDelete *> &m) {
     long totalAddedEdges = 0;

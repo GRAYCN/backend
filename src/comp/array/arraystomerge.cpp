@@ -7,7 +7,7 @@ namespace myarray {
 	
 ArraysToMerge::ArraysToMerge() {
 	size = capacity = arraySize = arrayCapacity = numEdges = 0;
-	resEdges = NULL; resLabels = NULL;
+	resEdges = nullptr; resLabels = nullptr;
 }
 
 void ArraysToMerge::mergeKArrays() {
@@ -64,15 +64,15 @@ void ArraysToMerge::mergeKArrays() {
 
 void ArraysToMerge::clear() {
 	if(capacity) {
-		if(edges) {	delete[] edges; edges = NULL;}
-		if(resEdges) { resEdges = NULL;}
-		if(labels) { delete[] labels; labels = NULL;}
-		if(resLabels) {  resLabels = NULL;}
+		if(edges) {	delete[] edges; edges = nullptr;}
+		if(resEdges) { resEdges = nullptr;}
+		if(labels) { delete[] labels; labels = nullptr;}
+		if(resLabels) {  resLabels = nullptr;}
 		capacity = size = 0;
 	}	
 	if(arrayCapacity) {
-		if(index) { delete[] index; index = NULL; }	
-		if(addr) { delete[] addr; addr = NULL; }
+		if(index) { delete[] index; index = nullptr; }
+		if(addr) { delete[] addr; addr = nullptr; }
 		arrayCapacity = arraySize;
 	}
 	numEdges = 0;

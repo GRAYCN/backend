@@ -59,9 +59,10 @@ void ComputationSet::init(PEGraph *out, std::map<int, EdgesToDelete *> &m) {
             label_t *labels = new label_t[n1];
             myalgo::minusTwoArray(len,edges,labels,n1,out->getEdges(i),out->getLabels(i),n2,Deltas[i].getEdges(),Deltas[i].getLabels());
             if(len)
-                out->setEdgeArray(i,len,edges,labels);
-            else
-                out->clearEdgeArray(i);
+//                out->setEdgeArray(i,len,edges,labels);
+                Olds[i] = EdgeArray(len, edges, labels);
+//            else
+//                out->clearEdgeArray(i);
 
             delete[] edges; delete[] labels;
         }

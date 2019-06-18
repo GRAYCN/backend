@@ -192,8 +192,6 @@ void CFGCompute::strong_update(vertexid_t x,PEGraph *out,std::set<vertexid_t> &v
 	 */
 	vertexid_t numVertices = out->getNumVertices();
     std::map<int, EdgesToDelete*> m;
-    std::map<int, EdgesToDelete*> m1;
-	EdgesToDelete *deleteSet = new EdgesToDelete[numVertices];
 
 	for(vertexid_t i = 0;i < numVertices;++i) {
 		int numEdges = out->getNumEdges(i);
@@ -208,14 +206,10 @@ void CFGCompute::strong_update(vertexid_t x,PEGraph *out,std::set<vertexid_t> &v
 			}
 		}
 	}
-    //todo 对out - m的边执行加边m中边操作，并将过程中的delta增加到m中，将算出的边进行删除
-    m1 = m;             //## 深拷贝还是浅拷贝
-
+    //对out - m的边执行加边m中边操作
     peg_compute(out, grammar, m);
 
 	/* merge and remove duplicate edges
-	 * update OUT,delete edges in OUT
-	 * clean
 	 */
 	for(vertexid_t i = 0;i < numVertices;++i) {
 	    if(m[i]){
@@ -223,14 +217,14 @@ void CFGCompute::strong_update(vertexid_t x,PEGraph *out,std::set<vertexid_t> &v
             int len = 0; int n1 = out->getNumEdges(i); int n2 = m[i]->getRealNumEdges();
             vertexid_t *edges = new vertexid_t[n1];
             label_t *labels = new label_t[n1];
-            myalgo::minusTwoArray(len,edges,labels,n1,out->getEdges(i),out->getLabels(i),n2,deleteSet[i].getEdges(),deleteSet[i].getLabels());
+            myalgo::minusTwoArray(len,edges,labels,n1,out->getEdges(i),out->getLabels(i),n2,m[i]->getEdges(),m[i]->getLabels());
             if(len)
                 out->setEdgeArray(i,len,edges,labels);
             else
                 out->clearEdgeArray(i);
 
             delete[] edges; delete[] labels;
-            // todo 此处应该如何操作
+            // todo 此处应该对m 如何操作
             m[i]->clear();
         }
 
@@ -284,31 +278,25 @@ void CFGCompute::peg_compute(PEGraph *out, Grammar *grammar, std::map<int, Edges
     PEGCompute pegCompute;
     pegCompute.startCompute(*compset,grammar, m);
 
-    // GEN fininshed, compset -> out
+    // KILL fininshed, compset -> out
     vertexid_t numVertices = out->getNumVertices();
-    for(vertexid_t i = 0;i < numVertices;++i) {
-        if(compset->getOldsNumEdges(i))
-            out->setEdgeArray(i,compset->getOldsNumEdges(i),compset->getOldsEdges(i),compset->getOldsLabels(i));
-        else
-            out->clearEdgeArray(i);
-    }
 
     // out - m
-    for (int i = 0; i < numVertices; ++i) {
-        if (m[i]!=nullptr){
-            int len = 0; int n1 = out->getNumEdges(i);
-            int n2 = m[i]->getRealNumEdges();
-            vertexid_t *edges = new vertexid_t[n1];
-            label_t *labels = new label_t[n1];
-            myalgo::minusTwoArray(len,edges,labels,n1, out->getEdges(i),out->getLabels(i),n2, m[i]->getEdges(), m[i]->getLabels());
-            if(len)
-                out->setEdgeArray(i,len,edges,labels);
-            else
-                out->clearEdgeArray(i);
-
-            delete[] edges; delete[] labels;
-        }
-    }
+//    for (int i = 0; i < numVertices; ++i) {
+//        if (m[i]!=nullptr){
+//            int len = 0; int n1 = out->getNumEdges(i);
+//            int n2 = m[i]->getRealNumEdges();
+//            vertexid_t *edges = new vertexid_t[n1];
+//            label_t *labels = new label_t[n1];
+//            myalgo::minusTwoArray(len,edges,labels,n1, out->getEdges(i),out->getLabels(i),n2, m[i]->getEdges(), m[i]->getLabels());
+//            if(len)
+//                out->setEdgeArray(i,len,edges,labels);
+//            else
+//                out->clearEdgeArray(i);
+//
+//            delete[] edges; delete[] labels;
+//        }
+//    }
 
     // clean
     compset->clear();
