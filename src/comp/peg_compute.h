@@ -1,6 +1,5 @@
 #ifndef COMP_PEGCOMPUTE_H
 #define COMP_PEGCOMPUTE_H
-
 #include "grammar.h"
 #include "computationset.h"
 #include "containerstomerge.h"
@@ -34,5 +33,4 @@ public:
                     Grammar *grammar);
 
 };
-
 #endif

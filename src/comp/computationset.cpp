@@ -40,6 +40,34 @@ void ComputationSet::init(PEGraph *out,Stmt *stmt) {
 	}
 }
 
+void ComputationSet::init(PEGraph *out, std::map<int, EdgesToDelete *> &m) {
+    // Old <- out - m, Deltas <- m  News <- NULL
+    this->numVertices = out->getNumVertices();
+    this->firstVid = out->getFirstVid();
+    Olds = new EdgeArray[this->numVertices];
+    Deltas = new EdgeArray[this->numVertices];
+    News = new EdgeArray[this->numVertices];
+
+    for(int i = 0;i < numVertices;++i) {
+        if(m[i]){
+            m[i]->merge();
+            Deltas[i] = EdgeArray(m[i]->getRealNumEdges(), m[i]->getEdges(), m[i]->getLabels());
+
+            int len = 0; int n1 = out->getNumEdges(i); int n2 = Deltas[i].getSize();
+            vertexid_t *edges = new vertexid_t[n1];
+            label_t *labels = new label_t[n1];
+            myalgo::minusTwoArray(len,edges,labels,n1,out->getEdges(i),out->getLabels(i),n2,Deltas[i].getEdges(),Deltas[i].getLabels());
+            if(len)
+//                out->setEdgeArray(i,len,edges,labels);
+                Olds[i] = EdgeArray(len, edges, labels);
+//            else
+//                out->clearEdgeArray(i);
+
+            delete[] edges; delete[] labels;
+        }
+    }
+}
+
 void ComputationSet::clear() {
 	if(numVertices) {
 		if(Olds) {

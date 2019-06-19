@@ -12,17 +12,17 @@ class ArraysToMerge : public ContainersToMerge {
 	 * 	faster and smaller(RAM)
 	 */ 
 private:
-	vertexid_t *edges;	// edges = new vertexid_t[capacity];
-	char *labels;		// labels = new char[capacity];
-	int size;			// size = total number of edges
-	int capacity;		// capacity = 2 * size
+	vertexid_t *edges{};
+	char *labels{};
+	int size;
+	int capacity;
 
-	vertexid_t *index;	// calculate offset of each array. index = new vertexid_t[arrayCapacity];
-	vertexid_t *addr;	// store the firstAddr of each array. addr = new vertexid_t[arrayCapacity];
-	int arraySize; 		// arraySize = number of arrays 
-	int arrayCapacity;	// arrayCapacity = 2 * arraySize
+	vertexid_t *index{};
+	vertexid_t *addr{};
+	int arraySize;
+	int arrayCapacity;
 
-	int numEdges;		// exclude duplicate edges (numEdges <= size)
+	int numEdges;
 	vertexid_t *resEdges;
 	char *resLabels;
 
@@ -33,13 +33,13 @@ public:
 	void mergeKArrays();
 
 	// virtual function
-	virtual void addOneContainer();
-	virtual void addOneEdge(vertexid_t edge,char label);
-	virtual int getNumEdges() {return numEdges;}
-	virtual void merge();
-	virtual vertexid_t* getEdgesFirstAddr() {return resEdges;}
-	virtual char* getLabelsFirstAddr() {return resLabels;}
-	virtual void clear();
+	void addOneContainer() override;
+	void addOneEdge(vertexid_t edge,char label) override;
+	int getNumEdges() override {return numEdges;}
+	void merge() override;
+	vertexid_t* getEdgesFirstAddr() override {return resEdges;}
+	char* getLabelsFirstAddr() override {return resLabels;}
+	void clear() override;
 };
 }
 #endif

@@ -23,13 +23,13 @@ class ListsToMerge : public ContainersToMerge {
 		void mergeKLists();
 
 		// virtual functions
-		virtual void addOneContainer();
-		virtual void addOneEdge(vertexid_t edge,char label);
-		virtual int getNumEdges() {return numEdges;}
-		virtual void merge();
-		virtual vertexid_t* getEdgesFirstAddr() {return edges;}
-		virtual char* getLabelsFirstAddr() {return labels;}
-		virtual void clear();
+		void addOneContainer() override;
+		void addOneEdge(vertexid_t edge,char label) override;
+		int getNumEdges() override {return numEdges;}
+		void merge() override;
+		vertexid_t* getEdgesFirstAddr() override {return edges;}
+		char* getLabelsFirstAddr() override {return labels;}
+		void clear() override;
 
 };	
 }

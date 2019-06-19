@@ -1,7 +1,19 @@
 #include "peg_compute.h"
 
-PEGCompute::PEGCompute() {
-		
+PEGCompute::PEGCompute() = default;
+
+long PEGCompute::startCompute(ComputationSet &compset, Grammar *grammar, std::map<int, EdgesToDelete *> &m) {
+    long totalAddedEdges = 0;
+
+    while(true) {
+        computeOneIteration(compset,grammar);
+        postProcessOneIteration(compset, m);
+        long realAddedEdgesPerIter = compset.getDeltasTotalNumEdges();
+        totalAddedEdges += realAddedEdgesPerIter;
+        if(!realAddedEdgesPerIter)
+            break;
+    }
+    return totalAddedEdges;
 }
 
 long PEGCompute::startCompute(ComputationSet &compset,Grammar *grammar) {
@@ -135,6 +147,9 @@ void PEGCompute::checkEdges(vertexid_t dstInd,char dstVal,ComputationSet &compse
 	}
 }
 
+
+
+
 void PEGCompute::postProcessOneIteration(ComputationSet &compset) {
 	// oldsV <- {oldsV,deltasV}
 	for(int i = 0;i < compset.getNumVertices();++i) {
@@ -178,4 +193,59 @@ void PEGCompute::postProcessOneIteration(ComputationSet &compset) {
 		compset.clearNews(i);
 	}
 }
+
+void PEGCompute::postProcessOneIteration(ComputationSet &compset, std::map<int, EdgesToDelete *> &m) {
+    // oldsV <- {oldsV,deltasV}
+    for(int i = 0;i < compset.getNumVertices();++i) {
+        bool oldEmpty = compset.oldEmpty(i);
+        bool deltaEmpty = compset.deltaEmpty(i);
+        if(oldEmpty) {
+            if(deltaEmpty)
+                compset.clearOlds(i);
+            else {
+                compset.setOlds(i,compset.getDeltasNumEdges(i),compset.getDeltasEdges(i),compset.getDeltasLabels(i));
+            }
+        }
+        else {
+            if(!deltaEmpty) {
+                int len = 0; int n1 = compset.getOldsNumEdges(i); int n2 = compset.getDeltasNumEdges(i);
+                vertexid_t *edges = new vertexid_t[n1+n2];
+                char *labels = new char[n1+n2];
+                myalgo::unionTwoArray(len,edges,labels,n1,compset.getOldsEdges(i),compset.getOldsLabels(i),n2,compset.getDeltasEdges(i),compset.getDeltasLabels(i));
+                compset.setOlds(i,len,edges,labels);
+                delete[] edges; delete[] labels;
+            }
+        }
+        compset.clearDeltas(i);
+    }
+    // deltasV <- newsV - oldsV, newsV <= empty set
+    for(int i = 0;i < compset.getNumVertices();++i) {
+        bool newEmpty = compset.newEmpty(i);
+        if(!newEmpty) {
+            int len = 0; int n1 = compset.getNewsNumEdges(i); int n2 = compset.getOldsNumEdges(i);
+            vertexid_t *edges = new vertexid_t[n1];
+            char *labels = new char[n1];
+            myalgo::minusTwoArray(len,edges,labels,n1,compset.getNewsEdges(i),compset.getNewsLabels(i),n2,compset.getOldsEdges(i),compset.getOldsLabels(i));
+
+            for (int j = 0; j < len; ++j) {
+                m[i]->addOneEdge(edges[j], labels[j]);
+            }
+
+            if(len)
+                compset.setDeltas(i,len,edges,labels);
+            else
+                compset.clearDeltas(i);
+            delete[] edges; delete[] labels;
+        }
+        else
+            compset.clearDeltas(i);
+        compset.clearNews(i);
+    }
+}
+
+
+
+
+
+
 
