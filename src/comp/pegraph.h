@@ -16,9 +16,9 @@ public:
 	PEGraph();
 	virtual ~PEGraph(){}
 
-	PEGraph(PEGraph *p); 
+	PEGraph(PEGraph *p);
 	bool equals(PEGraph* another);
-	
+
 	// getters and setters
 	inline vertexid_t getFirstVid() {return firstVid;}
 //	inline EdgeArray* getGraph() {return graph;}
@@ -30,10 +30,10 @@ public:
 
     void setGraphMap(EdgeArrayMap *graphMap);
 
-    inline vertexid_t* getEdges(vertexid_t index) {return graph->getEdgeArrayMap().at(index)->getEdges();}
-	inline label_t* getLabels(vertexid_t index) {return graph->getEdgeArrayMap().at(index)->getLabels();}
-	inline vertexid_t getNumEdges(vertexid_t index) {return graph->getEdgeArrayMap().at(index)->getSize();}
-	
+    inline vertexid_t* getEdges(vertexid_t index) {return graph->getEdgeArray(index)->getEdges();}
+	inline label_t* getLabels(vertexid_t index) {return graph->getEdgeArray(index)->getLabels();}
+	inline vertexid_t getNumEdges(vertexid_t index) {return graph->getEdgeArray(index)->getSize();}
+
 	void setEdgeArray(vertexid_t index,int numEdges,vertexid_t *edges,label_t *labels);
 	void clearEdgeArray(vertexid_t index);
 
