@@ -1,16 +1,20 @@
 //
 // Created by guihang on 2019/6/9.
 //
-#include <art.h>
+#include "art.h"
+#include <unordered_map>
+#include <algorithm>
 
-Node* ART::insert(vector<Edge>& v){
+using namespace std;
+
+Node* ART::insert(vector<Edge*>& v){
     if (v.empty()) return nullptr;
-    Node* parent = &root;
+    Node* parent = root;
     for (int i = 0; i < v.size(); ++i) {
-        Node* child = findChild(parent, &v[i]);
+        Node* child = findChild(parent, v[i]);
         if (!child) {
             child = new Node();
-            child->data = new Edge(v[i]);
+            child->data = new Edge(*v[i]);
             child->parent = parent;
             // insert new child to the front of the children
             child->next = parent->children;
@@ -21,21 +25,21 @@ Node* ART::insert(vector<Edge>& v){
     return parent;
 }
 
-void ART::insert(vector<Edge> v, Edge root, int begin){
+void ART::insert(vector<Edge*> v, Node* root, int begin){
     if (v.size() <= begin) {
-        node->leafNum++;                    //mark leaf, if node->leafNum>=1, the node is a leaf.
+        root->leafNum++;                    //mark leaf, if node->leafNum>=1, the node is a leaf.
         return;
     }
     Node* child = nullptr;
     // if not find , insert new node to the front of the children
-    if (!(child = findChild(node, &v[begin]))) {
+    if (!(child = findChild(root, v[begin]))) {
         child = new Node();
-        child->data = new Edge(v[begin]);
-        child->parent = node;
+        child->data = new Edge(*v[begin]);
+        child->parent = root;
 
         // insert new child to the front of the children
-        child->next = node->children;
-        node->children = child;
+        child->next = root->children;
+        root->children = child;
     }
     // node->childrenNum++;
 
@@ -45,8 +49,8 @@ void ART::insert(vector<Edge> v, Edge root, int begin){
 
 vector<Edge*> ART::retrieve(Node* node){
     vector<Edge*> v;
-    while (node->Edge != nullptr){
-        v.push_back(node->Edge);
+    while (node->data != nullptr){
+        v.push_back(node->data);
         node = node->parent;
     }
     return v;
@@ -118,7 +122,7 @@ void ART::DFS(Node *node){
     if(node->next){
         DFS(node->next);
     }
-    printf("%s\n", node->toString());
+    //todo access the edge info
 }
 
 Node* ART::findChild(Node* parent, Edge* child){
@@ -154,3 +158,25 @@ PEGraph* ART::convertToPEGraph(vector<Edge*>& v){
 vector<Edge*> ART::convertToVector(PEGraph* pegraph){
     //todo
 }
+
+
+void ART::edgeSort(vector<vector<Edge*>>& edges){
+    unordered_map<Edge, int> sortBase;
+    for(auto& graph : edges){
+        for(auto& edge : graph){
+            if(sortBase.find(*edge) == sortBase.end()){
+                sortBase[*edge] = 1;
+            } else{
+                sortBase[*edge]++;
+            }
+        }
+    }
+
+    for(auto& graph : edges){
+        sort(graph.begin(), graph.end(), [&sortBase](const Edge* lhs, const Edge* rhs) -> bool {
+            return sortBase[*lhs]>sortBase[*rhs];
+        });
+    }
+}
+
+ART::ART() {}
