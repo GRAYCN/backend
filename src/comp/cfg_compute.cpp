@@ -200,19 +200,20 @@ void CFGCompute::strong_update(vertexid_t x,PEGraph *out,std::set<vertexid_t> &v
 		for(int j = 0;j < numEdges;++j) {
 			if(isDirectAssignEdges(i + out->getFirstVid(),edges[j],labels[j],vertices,grammar)) {
 				// delete the direct incoming and outgoing assign edges
-				if (m[i] == nullptr)
+                if(m.find(i)==m.end())
 				    m[i] = new EdgesToDelete;
 				m[i]->addOneEdge(edges[j],labels[j]);
 			}
 		}
 	}
     //对out - m的边执行加边m中边操作
+    // execute the add edge operation. the oldsSet is out - m, the deltasSdge is m
     peg_compute(out, grammar, m);
 
 	/* merge and remove duplicate edges
 	 */
 	for(vertexid_t i = 0;i < numVertices;++i) {
-	    if(m[i]){
+	    if(m.find(i)!=m.end()){
 	        m[i]->merge();
             int len = 0; int n1 = out->getNumEdges(i); int n2 = m[i]->getRealNumEdges();
             vertexid_t *edges = new vertexid_t[n1];
@@ -224,13 +225,9 @@ void CFGCompute::strong_update(vertexid_t x,PEGraph *out,std::set<vertexid_t> &v
                 out->clearEdgeArray(i);
 
             delete[] edges; delete[] labels;
-            // todo 此处应该对m 如何操作
-            m[i]->clear();
+//            m[i]->clear();
         }
-
 	}
-	//todo 要把 map delete吗
-//	delete[] deleteSet;
 }
 
 bool CFGCompute::isDirectAssignEdges(vertexid_t src,vertexid_t dst,label_t label,std::set<vertexid_t> &vertices,Grammar *grammar) {
@@ -299,8 +296,8 @@ void CFGCompute::peg_compute(PEGraph *out, Grammar *grammar, std::map<int, Edges
 //    }
 
     // clean
-    compset->clear();
-    delete compset;
+//    compset->clear();
+//    delete compset;
 }
 
 void CFGCompute::peg_compute(PEGraph *out,Stmt *stmt,Grammar *grammar) {
@@ -322,8 +319,8 @@ void CFGCompute::peg_compute(PEGraph *out,Stmt *stmt,Grammar *grammar) {
 	 		out->clearEdgeArray(i);
 	}
 	// clean
-	compset->clear();
-	delete compset;	
+//	compset->clear();
+//	delete compset;
 }
 
 void CFGCompute::initComputationSet(ComputationSet &compset,PEGraph *out,Stmt *stmt) {

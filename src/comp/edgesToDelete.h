@@ -31,7 +31,7 @@ class EdgesToDelete {
     }
 
     void addOneEdge(vertexid_t edge,label_t label);
-		void merge();
+    void merge();
 
 };
 
