@@ -12,18 +12,24 @@ using namespace std;
 
 
 
-int main() {
-	CFG *cfg = new CFG_map();
-	GraphStore *graphstore = new NaiveGraphStore();
-//	Partition *partition = nullptr;
-//	cout << cfg << endl;
+//int main() {
+//	CFG *cfg = new CFG_map();
+//	GraphStore *graphstore = new NaiveGraphStore();
+////	Partition *partition = nullptr;
+////	cout << cfg << endl;
+//
+//	CFGCompute::load("/home/zqzuo/Desktop/inlined/final", "/home/zqzuo/Desktop/inlined/id_stmt_info.txt", "/home/zqzuo/Desktop/inlined/var_singleton_info.txt", cfg, graphstore);
+//	CFGCompute::do_worklist(cfg, graphstore);
+//
+//	delete cfg;
+//	delete graphstore;
+//
+////	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
+//	return 0;
+//}
 
-	CFGCompute::load("/home/zqzuo/Desktop/inlined/final", "/home/zqzuo/Desktop/inlined/id_stmt_info.txt", "/home/zqzuo/Desktop/inlined/var_singleton_info.txt", cfg, graphstore);
-	CFGCompute::do_worklist(cfg, graphstore);
+// 对art存储进行robust测试
+int main(){
 
-	delete cfg;
-	delete graphstore;
-
-//	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
-	return 0;
+    return 0;
 }
