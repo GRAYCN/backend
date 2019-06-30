@@ -19,7 +19,7 @@ struct Edge {
 
     Edge() {};
 
-    Edge(int src, char label, int des) : src(src), label(label), des(des) {};
+    Edge(int src, int des, char label) : src(src), label(label), des(des) {};
 
     Edge(const Edge &edge) {
         this->src = edge.src;
@@ -49,7 +49,6 @@ struct Edge {
             return false;
         return label < rhs.label;
     }
-
 
 
     bool operator!=(const Edge &rhs) const {
@@ -98,18 +97,12 @@ struct Node {
         if (!other)return false;
         return this->data->equal(other);
     }
-
-    void toString() {
-        cout << this->data->src << " " << this->data->label << " " << this->data->des << endl;
-    }
 };
 
 class ART : public GraphStore {
 
 public:
     ART();
-
-//    ART();
 
     ~ART();
 
@@ -131,9 +124,18 @@ public:
 
     Node *findChild(Node *parent, Edge *child);
 
-    PEGraph * convertToPEGraph(vector<Edge *> &v) const;
+    PEGraph *convertToPEGraph(vector<Edge *> &v) const;
 
     vector<Edge *> convertToVector(PEGraph *pegraph);
+
+    void loadGraphStore(const string &file_singleton) override;
+
+    void addOneSingleton(vertexid_t t) override;
+
+    bool isSingleton(vertexid_t vid) override;
+
+protected:
+    void print(ostream &str) const override;
 
 //    void addOneSingleton(vertexid_t t);
 

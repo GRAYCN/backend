@@ -16,6 +16,8 @@ ART::~ART() {
 
 }
 
+//非递归的方法
+// ## hash在哪里？
 Node *ART::insert(vector<Edge *> &v) {
     if (v.empty()) return nullptr;
     Node *parent = root;
@@ -131,7 +133,7 @@ Node *ART::findChild(Node *parent, Edge *child) {
     Node *children = parent->children;
     while (children) {
         if (children->equal(child)) return children;
-        children = children->next;
+        children = children->next;\
     }
     return nullptr;
 }
@@ -161,7 +163,7 @@ vector<Edge *> ART::convertToVector(PEGraph *pegraph) {
         label_t* labels = it->second.getLabels();
         Edge* edge;
         for (int i = 0; i < size; ++i) {
-            edge = new Edge(it->first, edges[i], labels[i]);
+            edge = new Edge(it->first, labels[i], edges[i]);
             v.push_back(edge);
             delete edge;
         }
@@ -205,6 +207,22 @@ void ART::edgeSort(vector<vector<Edge *>> &edges) {
             return sortBase[*lhs] > sortBase[*rhs];
         });
     }
+}
+
+void ART::loadGraphStore(const string &file_singleton) {
+
+}
+
+void ART::addOneSingleton(vertexid_t t) {
+    GraphStore::addOneSingleton(t);
+}
+
+bool ART::isSingleton(vertexid_t vid) {
+    return GraphStore::isSingleton(vid);
+}
+
+void ART::print(ostream &str) const {
+
 }
 
 
