@@ -122,7 +122,7 @@ public:
 
     void edgeSort(vector<vector<Edge *>> &edges);
 
-    Node *findChild(Node *parent, Edge *child);
+    static Node *findChild(Node *parent, Edge *child);
 
     PEGraph *convertToPEGraph(vector<Edge *> &v) const;
 
@@ -141,7 +141,7 @@ protected:
 
 private:
     Node *root;
-    std::unordered_map<PEGraph_Pointer, Node *> m;
+    std::unordered_map<PEGraph_Pointer, Node *> mapToPEGraphLeaf;
 //    std::set<vertexid_t> singletonSet;
 
 };

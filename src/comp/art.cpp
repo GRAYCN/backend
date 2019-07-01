@@ -17,7 +17,7 @@ ART::~ART() {
 }
 
 //非递归的方法
-// ## hash在哪里？
+// ## hash在哪里？ 在插入之后的位置获取
 Node *ART::insert(vector<Edge *> &v) {
     if (v.empty()) return nullptr;
     Node *parent = root;
@@ -37,27 +37,27 @@ Node *ART::insert(vector<Edge *> &v) {
     return parent;
 }
 
-void ART::insert(vector<Edge *> v, Node *root, int begin) {
-    if (v.size() <= begin) {
-        root->leafNum++;                    //mark leaf, if node->leafNum>=1, the node is a leaf.
-        return;
-    }
-    Node *child = nullptr;
-    // if not find , insert new node to the front of the children
-    if (!(child = findChild(root, v[begin]))) {
-        child = new Node();
-        child->data = new Edge(*v[begin]);
-        child->parent = root;
-
-        // insert new child to the front of the children
-        child->next = root->children;
-        root->children = child;
-    }
-    // node->childrenNum++;
-
-    // insert deeper
-    insert(v, child, ++begin);
-}
+//void ART::insert(vector<Edge *> v, Node *root, int begin) {
+//    if (v.size() <= begin) {
+//        root->leafNum++;                    //mark leaf, if node->leafNum>=1, the node is a leaf.
+//        return;
+//    }
+//    Node *child = nullptr;
+//    // if not find , insert new node to the front of the children
+//    if (!(child = findChild(root, v[begin]))) {
+//        child = new Node();
+//        child->data = new Edge(*v[begin]);
+//        child->parent = root;
+//
+//        // insert new child to the front of the children
+//        child->next = root->children;
+//        root->children = child;
+//    }
+//    // node->childrenNum++;
+//
+//    // insert deeper
+//    insert(v, child, ++begin);
+//}
 
 vector<Edge *> ART::retrieveFromLeaf(Node *node) const {
     vector<Edge *> v;
@@ -128,12 +128,13 @@ void ART::DFS(Node *node) {
     //access the edge info
 }
 
+//find if the edge exist in the children pointer of a node, if not, return null.
 Node *ART::findChild(Node *parent, Edge *child) {
     if (!parent || !child) return nullptr;
     Node *children = parent->children;
     while (children) {
         if (children->equal(child)) return children;
-        children = children->next;\
+        children = children->next;
     }
     return nullptr;
 }
@@ -172,18 +173,18 @@ vector<Edge *> ART::convertToVector(PEGraph *pegraph) {
 }
 
 void ART::update(PEGraph_Pointer graph_pointer, PEGraph *pegraph) {
-    Node *node = m[graph_pointer];
+    Node *node = mapToPEGraphLeaf[graph_pointer];
     del(node);
     vector<Edge *> v = convertToVector(pegraph);
     // todo we can sort v before insert
     Node *leaf = insert(v);
-    m[graph_pointer] = leaf;
+    mapToPEGraphLeaf[graph_pointer] = leaf;
 }
 
 
 PEGraph * ART::retrieve(PEGraph_Pointer graph_pointer) {
-    if (m.find(graph_pointer)!= m.end()){
-        Node* node = m[graph_pointer];
+    if (mapToPEGraphLeaf.find(graph_pointer)!= mapToPEGraphLeaf.end()){
+        Node* node = mapToPEGraphLeaf[graph_pointer];
         vector<Edge *> v = retrieveFromLeaf(node);
         return convertToPEGraph(v);
     }
